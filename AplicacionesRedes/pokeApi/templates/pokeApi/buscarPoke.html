@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+    <div class="search-container">
+        <h2 class="search-title">Buscar Pokémon</h2>
+        <form method="get" class="search-form">
+            <input type="text" name="name" placeholder="Introduce el nombre del Pokémon" required class="search-input">
+            <button type="submit" class="search-button">Buscar</button>
+        </form>
+    </div>
+
+    {% if pokemon_data %}
+        <div class="result-container">
+            <h3 class="result-title">Resultados para {{ pokemon_data.name }}</h3>
+            <img src="{{ pokemon_data.sprites.front_default }}" alt="{{ pokemon_data.name }}" class="pokemon-image">
+            <table class="result-table">
+                <tr>
+                    <th class="result-header">Característica</th>
+                    <th class="result-header">Valor</th>
+                </tr>
+                <tr>
+                    <td class="result-cell">Altura</td>
+                    <td class="result-cell">{{ pokemon_data.height }}</td>
+                </tr>
+                <tr>
+                    <td class="result-cell">Peso</td>
+                    <td class="result-cell">{{ pokemon_data.weight }}</td>
+                </tr>
+                <tr>
+                    <td class="result-cell">Experiencia Base</td>
+                    <td class="result-cell">{{ pokemon_data.base_experience }}</td>
+                </tr>
+                <tr>
+                    <td class="result-cell">Habilidades</td>
+                    <td class="result-cell">
+                        {% for ability in pokemon_data.abilities %}
+                            {{ ability.ability.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="result-cell">Tipos</td>
+                    <td class="result-cell">
+                        {% for type in pokemon_data.types %}
+                            {{ type.type.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    {% elif request.GET.name %}
+        <p class="no-results">No se encontró el Pokémon. Intenta con otro nombre.</p>
+    {% endif %}
+{% endblock %}
